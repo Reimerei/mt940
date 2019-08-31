@@ -100,6 +100,7 @@ defmodule MT940.Parser do
     case parts |> Enum.all?(fn s -> "^#{tag}" |> Regex.compile! |> Regex.match?(s) end) do
       true  -> parts
       |> Enum.map(&Regex.run(Regex.compile!("^(#{tag})(.*)$"), &1, capture: :all_but_first))
+      |> Enum.reject(&is_nil/1)
       |> to_keywords
       false -> {:error, :badarg}
     end
